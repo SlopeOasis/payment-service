@@ -1,0 +1,12 @@
+@echo off
+set SERVER_PORT=8082
+set CLERK_ISSUER=CLERK_ISSUER
+set CLERK_JWKS_URL=CLERK_JWKS_URL
+set JWT_DEV_MODE=false
+set POST_SERVICE_BASE_URL=http://localhost:8081
+set USER_SERVICE_BASE_URL=http://localhost:8080
+set POLYGON_RPC_URL=https://polygon-rpc.com
+set COINGECKO_API_KEY=COINGECKO_API_KEY
+set COINGECKO_API_KEY_HEADER=x-cg-demo-api-key
+set COINGECKO_BASE_URL=https://api.coingecko.com/api/v3
+mvn spring-boot:run
