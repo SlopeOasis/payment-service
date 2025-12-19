@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      containers:
+        - name: payment-service
+          image: payment-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8082
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://payment-db:5432/paymentdb
+            - name: SPRING_DATASOURCE_USERNAME
+              value: payment
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: password
+            - name: COINGECKO_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: payment-service-secrets
+                  key: COINGECKO_API_KEY
+          envFrom:
+            - configMapRef:
+                name: payment-service-config
