@@ -19,17 +19,38 @@ spec:
           ports:
             - containerPort: 8082
           env:
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://payment-db:5432/paymentdb
-            - name: SPRING_DATASOURCE_USERNAME
-              value: payment
-            - name: SPRING_DATASOURCE_PASSWORD
-              value: password
-            - name: COINGECKO_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: payment-service-secrets
-                  key: COINGECKO_API_KEY
+              - name: SPRING_DATASOURCE_URL
+                value: jdbc:postgresql://$(PGHOST):$(PGPORT)/$(PGDATABASE)?sslmode=require
+              - name: SPRING_DATASOURCE_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: payment-db-secret
+                    key: PGUSER
+              - name: SPRING_DATASOURCE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: payment-db-secret
+                    key: PGPASSWORD
+              - name: PGHOST
+                valueFrom:
+                  secretKeyRef:
+                    name: payment-db-secret
+                    key: PGHOST
+              - name: PGPORT
+                valueFrom:
+                  secretKeyRef:
+                    name: payment-db-secret
+                    key: PGPORT
+              - name: PGDATABASE
+                valueFrom:
+                  secretKeyRef:
+                    name: payment-db-secret
+                    key: PGDATABASE
+              - name: COINGECKO_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: payment-service-secrets
+                    key: COINGECKO_API_KEY
           envFrom:
             - configMapRef:
                 name: payment-service-config
