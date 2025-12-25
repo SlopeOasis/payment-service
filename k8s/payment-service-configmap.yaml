@@ -4,6 +4,8 @@ metadata:
   name: payment-service-config
 data:
   SERVER_PORT: "8082"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://userdatabase.postgres.database.azure.com:5432/paymendb?sslmode=require"
+
   # Clerk JWT
   CLERK_ISSUER: "https://upright-bird-25.clerk.accounts.dev"
   CLERK_JWKS_URL: "https://upright-bird-25.clerk.accounts.dev/.well-known/jwks.json"

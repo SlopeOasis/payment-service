@@ -12,15 +12,15 @@ spec:
       labels:
         app: payment-service
     spec:
+      imagePullSecrets:
+        - name: acr-auth
       containers:
         - name: payment-service
-          image: payment-service:latest
-          imagePullPolicy: IfNotPresent
+          image: slopeoasisacr.azurecr.io/payment-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8082
           env:
-              - name: SPRING_DATASOURCE_URL
-                value: jdbc:postgresql://$(PGHOST):$(PGPORT)/$(PGDATABASE)?sslmode=require
               - name: SPRING_DATASOURCE_USERNAME
                 valueFrom:
                   secretKeyRef:
@@ -51,6 +51,10 @@ spec:
                   secretKeyRef:
                     name: payment-service-secrets
                     key: COINGECKO_API_KEY
+              - name: USER_SERVICE_BASE_URL
+                value: http://user-service:8080
+              - name: POST_SERVICE_BASE_URL
+                value: http://post-service:8081
           envFrom:
             - configMapRef:
                 name: payment-service-config
