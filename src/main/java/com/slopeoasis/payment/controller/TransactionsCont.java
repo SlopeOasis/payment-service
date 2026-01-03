@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import com.slopeoasis.payment.service.TransactionsServ;
 
 @RestController
@@ -17,6 +21,11 @@ public class TransactionsCont {
         this.transactionsServ = transactionsServ;
     }
 
+    @Operation(summary = "Get my transactions")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedError")
+    })
     @GetMapping("/me")
     public ResponseEntity<?> myTransactions(
             @RequestAttribute(name = "X-User-Id", required = false) String buyerClerkId

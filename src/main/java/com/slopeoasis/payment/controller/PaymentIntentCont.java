@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.slopeoasis.payment.entity.PaymentIntent;
@@ -25,6 +29,12 @@ public class PaymentIntentCont {
         this.paymentIntentServ = paymentIntentServ;
     }
 
+    @Operation(summary = "Create payment intent")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Intent created"),
+        @ApiResponse(responseCode = "400", description = "Invalid request"),
+        @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedError")
+    })
     @PostMapping("/intent")
     public ResponseEntity<PaymentIntentResponse> createIntent(
             @RequestBody CreateIntentRequest request,

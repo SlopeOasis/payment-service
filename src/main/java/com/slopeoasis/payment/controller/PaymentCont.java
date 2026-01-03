@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import com.slopeoasis.payment.service.PaymentVerificationServ;
 
 @RestController
@@ -24,6 +28,14 @@ public class PaymentCont {
 
     public record ConfirmRequest(UUID paymentId, String txHash) {}
 
+    @Operation(summary = "Confirm payment")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Payment confirmed"),
+        @ApiResponse(responseCode = "202", description = "Transaction pending"),
+        @ApiResponse(responseCode = "400", description = "Transaction failed or invalid"),
+        @ApiResponse(responseCode = "401", ref = "#/components/responses/UnauthorizedError"),
+        @ApiResponse(responseCode = "500", description = "IO error while verifying transaction")
+    })
     @PostMapping("/confirm")
     public ResponseEntity<?> confirm(
             @RequestBody ConfirmRequest req,
