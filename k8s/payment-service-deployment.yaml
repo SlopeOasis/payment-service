@@ -20,6 +20,22 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8082
+          readinessProbe: #tuki
+            httpGet:
+              path: /healthpayment
+              port: 8082
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /healthpayment
+              port: 8082
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 2
+            failureThreshold: 3 #tuki
           env:
               - name: SPRING_DATASOURCE_USERNAME
                 valueFrom:
